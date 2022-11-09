@@ -202,7 +202,7 @@ function Login(props) {
     if(emailTest===true && passwordTest===true){
       login(loginObj).then((response)=>{
         console.log(response)
-        localStorage.setItem("accessToken",response.data.result)
+        localStorage.setItem("token",response.data.result.accessToken)
       }).catch((error)=>{
         console.log(error)
       })

@@ -7,11 +7,13 @@ import StarIcon from '@mui/icons-material/Star';
 
 const useStyle = makeStyles({
     main2: {
-        width: '20vw',
+        width: '18vw',
         height: '45vh',
         border: '1px solid #D3D3D3',
         display: 'flex',
         flexDirection: 'column',
+        marginRight:'15px',
+        marginTop:'15px',
     },
     bookimage: {
         width: '100%',
@@ -101,7 +103,7 @@ const useStyle = makeStyles({
     }
 })
 
-function Book() {
+function Book(props) {
     const classes = useStyle()
     return (
         <div>
@@ -111,18 +113,32 @@ function Book() {
                 </Box>
                 <Box className={classes.bookdetail}>
                     <Box className={classes.booktext}>
-                        <Box className={classes.booktitle}>Don't Make Me Think</Box>
-                        <Box className={classes.bookauthor}>by Steve Krug</Box>
+                        <Box className={classes.booktitle}>
+                            {/* Don't Make Me Think */}
+                            {props.book.bookName}
+                            </Box>
+                        <Box className={classes.bookauthor}>
+                            {/* by Steve Krug */}
+                            {props.book.author}
+                            </Box>
                         <Box className={classes.bookdetail1}>
                             <Box className={classes.bookratings}>
                                 <Box sx={{ fontSize: '12px' }}>4.5</Box>
                                 <StarIcon fontSize="12px" sx={{ color: 'white' }} />
                             </Box>
-                            <Box className={classes.mark}> (20)</Box>
+                            <Box className={classes.mark}>
+                                 {/* (20) */}
+                                 ({props.book.quantity})
+                                 </Box>
                         </Box>
                         <Box className={classes.bookprice}>
-                            <Box className={classes.bookdiscount}>Rs. 1500</Box>
-                            <Box className={classes.bookcost}>Rs. 20000</Box>
+                            <Box className={classes.bookdiscount}>Rs. 
+                            {/* 1500 */}
+                            {props.book.discountPrice}</Box>
+                            <Box className={classes.bookcost}>Rs. 
+                            {/* 20000 */}
+                            {props.book.price}
+                            </Box>
                         </Box>
                     </Box>
                 </Box>

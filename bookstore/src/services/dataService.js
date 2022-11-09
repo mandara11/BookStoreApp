@@ -1,6 +1,5 @@
 import axios from "axios"
 
-
 const headerConfig={
     headers:{Authorization:localStorage.getItem('accessToken')}
 }
