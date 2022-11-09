@@ -7,6 +7,7 @@ import { Divider } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { useState } from 'react';
 import { login } from '../../services/userService';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 
 const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&-+=()])([a-zA-Z0-9]*).{8,}$/;
@@ -171,14 +172,14 @@ function Login(props) {
     if (emailTest===false){
       setRegexObj(prevState=> ({
         ...prevState,
-        emailBorder:'true',
+        emailBorder:true,
         emailHelper:'Enter valid e-mail or phone number'
       }))
     }
     else if(emailTest===true){
       setRegexObj(prevState=> ({
         ...prevState,
-        emailBorder:'false',
+        emailBorder:false,
         emailHelper:""
       }))
     }
@@ -186,14 +187,14 @@ function Login(props) {
     if (passwordTest===false){
       setRegexObj(prevState=> ({
         ...prevState,
-        passwordBorder:'true',
+        passwordBorder:true,
         passwordHelper:'Enter valid password'
       }))
     }
     else if(passwordTest===true){
       setRegexObj(prevState=> ({
         ...prevState,
-        passwordBorder:'false',
+        passwordBorder:false,
         passwordHelper:""
       }))
     }
@@ -201,6 +202,7 @@ function Login(props) {
     if(emailTest===true && passwordTest===true){
       login(loginObj).then((response)=>{
         console.log(response)
+        localStorage.setItem("accessToken",response.data.result)
       }).catch((error)=>{
         console.log(error)
       })
