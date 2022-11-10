@@ -8,6 +8,7 @@ import SplitButton from './SplitButton';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { getBookList } from '../../services/dataService';
+import BookSummary from '../../components/booksummary/BookSummary';
 
 
 
@@ -55,30 +56,42 @@ const useStyles = makeStyles({
         left: '16px',
     },
     footer: {
-        height:'8vh',
-        width:'100vw',
-        display:'flex',
-        border:'0px solid red',
-        flexDirection:'row',
-        alignItems:'center',
-        fontSize:'11px',
-        position:'relative',
-        top:'30px',
-        backgroundColor:'#2E1D1E',
-        color:'#FFFFFF',
+        height: '8vh',
+        width: '100vw',
+        display: 'flex',
+        border: '0px solid red',
+        flexDirection: 'row',
+        alignItems: 'center',
+        fontSize: '11px',
+        position: 'relative',
+        top: '30px',
+        backgroundColor: '#2E1D1E',
+        color: '#FFFFFF',
     },
     footertxt: {
-        position:'relative',
-        left:'180px',
-    }
+        position: 'relative',
+        left: '180px',
+    },
 })
 
-function Dashboard() {
+function Dashboard(props) {
 
     const classes = useStyles()
 
     const [bookList, setBookList] = useState([])
+    const [toggle1, setToggle1] = useState(false)
+    const [input, setInput] = useState({})
 
+    const openBookSummary = (detailsObj) => {
+        setToggle1(true);
+        console.log(detailsObj)
+        setInput(detailsObj)
+        console.log(input.bookName, "particular book details")
+    };
+
+    const openBookBack = () => {
+        setToggle1(false)
+    }
 
     useEffect(() => {
         getBookList().then((response) => {
@@ -87,31 +100,31 @@ function Dashboard() {
         }).catch((error) => {
             console.log(error)
         })
-    },[])
+    }, [])
 
     return (
         <div>
             <Box>
                 <Header />
-                <Box className={classes.container2}>
-                    <Box className={classes.header2}>
-                        <Box className={classes.booktextitem}>
-                            <Box className={classes.bookstxt}>Books</Box>
-                            <Box className={classes.totalitems}>(128 items)</Box>
-                        </Box>
-                        <Box className={classes.header2btn}>
-                            <SplitButton />
-                        </Box>
+            </Box>
+            <Box className={classes.container2}>
+                <Box className={classes.header2}>
+                    <Box className={classes.booktextitem}>
+                        <Box className={classes.bookstxt}>Books</Box>
+                        <Box className={classes.totalitems}>(128 items)</Box>
                     </Box>
-                    <Box  sx={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-                        {
-                            bookList.map((book) => (<Book key={book._id} book={book} />))
-                        }
+                    <Box className={classes.header2btn}>
+                        <SplitButton />
                     </Box>
                 </Box>
-                <Box className={classes.footer}>
-                    <Box className={classes.footertxt}>Copyright @ 2020, Bookstore Private Limited.All Rights Reserved</Box>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+                    {toggle1 ? <BookSummary openBookBack={openBookBack} bookName={input.bookName} author={input.author} quantity={input.quantity} discountPrice={input.discountPrice} price={input.price} /> :
+                        bookList.map((book) => (<Box onClick={()=>openBookSummary(book)} ><Book key={book._id} book={book} /> </Box>))
+                    }
                 </Box>
+            </Box>
+            <Box className={classes.footer}>
+                <Box className={classes.footertxt}>Copyright @ 2020, Bookstore Private Limited.All Rights Reserved</Box>
             </Box>
         </div>
     )
