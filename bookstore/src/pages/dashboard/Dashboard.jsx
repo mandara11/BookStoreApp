@@ -118,8 +118,8 @@ function Dashboard(props) {
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-                    {toggle1 ? <BookSummary openBookBack={openBookBack} bookName={input.bookName} author={input.author} quantity={input.quantity} discountPrice={input.discountPrice} price={input.price} /> :
-                        bookList.map((book) => (<Box onClick={()=>openBookSummary(book)} ><Book key={book._id} book={book} /> </Box>))
+                    {toggle1 ? <BookSummary openBookBack={openBookBack} id={input._id} bookName={input.bookName} author={input.author} quantity={input.quantity} discountPrice={input.discountPrice} price={input.price} />
+                     : bookList.map((book) => (<Box onClick={()=>openBookSummary(book)} ><Book key={book._id} book={book} /> </Box>))
                     }
                 </Box>
             </Box>

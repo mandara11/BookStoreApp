@@ -1,6 +1,5 @@
 import React from 'react'
 import { makeStyles } from '@mui/styles'
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import Header from '../header/Header';
@@ -9,6 +8,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Divider } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import InputBase from '@mui/material/InputBase';
+import { useState } from 'react';
+import Counter from './Counter';
+import { addToCart, addToWishList } from '../../services/dataService';
 
 
 const useStyle = makeStyles({
@@ -249,8 +251,8 @@ const useStyle = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    position:'relative',
-    top:'6px',
+    position: 'relative',
+    top: '6px',
   },
   ac: {
     width: '27px',
@@ -271,8 +273,8 @@ const useStyle = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    position:'relative',
-    top:'40px',
+    position: 'relative',
+    top: '40px',
   },
   sb: {
     width: '27px',
@@ -287,8 +289,8 @@ const useStyle = makeStyles({
     alignItems: 'center',
   },
   stars1: {
-    position:'relative',
-    bottom:'5px',
+    position: 'relative',
+    bottom: '5px',
   }
 
 })
@@ -296,9 +298,29 @@ const useStyle = makeStyles({
 function BookSummary(props) {
   const classes = useStyle()
 
- const openBook=()=>{
-   props.openBookBack()
- }
+  const [toggle2, setToggle2] = useState(false)
+  const [toggle3, setToggle3] = useState(false)
+
+  const addToBag = () => {
+    setToggle2(true)
+    console.log(props.id)
+    addToCart(props.id).then((response) => {
+      console.log(response, 'added')
+    }).catch((errror) => { console.log(errror) })
+  }
+
+  const addWishList = () => {
+    console.log(props.id)
+    addToWishList(props.id).then((response) => {
+      console.log(response)
+    }).catch((error) => { console.log(error) })
+    setToggle3(true)
+  }
+
+  const openBook = () => {
+    props.openBookBack()
+    setToggle2(true)
+  }
 
   return (
     <div>
@@ -321,16 +343,24 @@ function BookSummary(props) {
               <Box className={classes.bookimg1}><img src='assets/image11.png' width='85%' height='85%' /></Box>
               <Box className={classes.bookbtn}>
                 <Box className={classes.bookbtns}>
-                  <Button variant="contained" className={classes.addbag}>Add to Bag</Button>
-                  <Button variant="contained" className={classes.addfav} startIcon={<FavoriteIcon />}>Wishlist</Button>
+                  {
+                    toggle2 ? <Counter />
+                      :
+                      <Button onClick={addToBag} variant="contained" className={classes.addbag}>Add to Bag</Button>
+                  }
+                  {
+                    toggle3 ?  <Button variant="contained" className={classes.addfav} startIcon={<FavoriteIcon sx={{ color: 'red' }} />}></Button>
+                    :
+                    <Button onClick={addWishList} variant="contained" className={classes.addfav} startIcon={<FavoriteIcon />}>Wishlist</Button>
+                  }
                 </Box>
               </Box>
             </Box>
             <Box className={classes.bookdetails}>
               <Box className={classes.bookdetails1}>
                 <Box className={classes.booktitle1}>
-                   {/* Don't Make Me Think  */}
-                   {props.bookName}</Box>
+                  {/* Don't Make Me Think  */}
+                  {props.bookName}</Box>
                 <Box sx={{ height: '1%' }}></Box>
                 <Box className={classes.bookauthor1}>{props.author}</Box>
                 <Box sx={{ height: '0.6%' }}></Box>
