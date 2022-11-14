@@ -1,9 +1,10 @@
 import { makeStyles } from '@mui/styles'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../header/Header'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
+import { getWishList } from '../../services/dataService';
 
 
 const useStyle = makeStyles({
@@ -112,8 +113,8 @@ const useStyle = makeStyles({
         fontSize: '12px',
         color: '#9D9D9D',
         textDecorationLine: 'line-through',
-        position:'relative',
-        left :'10px',
+        position: 'relative',
+        left: '10px',
     },
     footer1: {
         height: '8vh',
@@ -127,8 +128,8 @@ const useStyle = makeStyles({
         top: '30px',
         backgroundColor: '#2E1D1E',
         color: '#FFFFFF',
-        position:'relative',
-        top:'35vh',
+        position: 'relative',
+        top: '35vh',
     },
     footertxt1: {
         position: 'relative',
@@ -138,6 +139,14 @@ const useStyle = makeStyles({
 
 function MyWishlist() {
     const classes = useStyle()
+    const [wishList, setWishList] = useState([])
+
+    useEffect(() => {
+        getWishList().then((response) => {
+            console.log(response)
+            setWishList(response.data.result)
+        }).catch((error) => { console.log(error) })
+    }, [])
     return (
         <div>
             <Box>
@@ -152,33 +161,40 @@ function MyWishlist() {
                             <span>My Wishlist (02)</span>
                         </Box>
                     </Box>
-                    <Box className={classes.bookdetailwish}>
-                            <Box className={classes.bookcontentwish}>
-                                <Box className={classes.imagewish}>
-                                    <Box className={classes.imagebookwish}>
-                                        <img src='assets/image11.png' width='100%' />
-                                    </Box>
-                                    <Box className={classes.booknamewish}>
-                                        <Box className={classes.booktitlewish}>
-                                            {/* <span>{list.product_id.bookName}</span> */}
-                                            <Box>Dont Make Me Think</Box>
+                    {
+                        wishList.map((note) => (
+                            <Box className={classes.bookdetailwish}>
+                                <Box className={classes.bookcontentwish}>
+                                    <Box className={classes.imagewish}>
+                                        <Box className={classes.imagebookwish}>
+                                            <img src='assets/image11.png' width='100%' />
                                         </Box>
-                                        <Box className={classes.bookAuthorwish}><span>by Steve King</span></Box>
-                                        <Box className={classes.bookpricewish}>
-                                            <Box className={classes.discountwish}>Rs.1500</Box>
-                                            <Box className={classes.pricewish}>Rs.2000</Box>
+                                        <Box className={classes.booknamewish}>
+                                            <Box className={classes.booktitlewish}>
+                                                <Box>
+                                                {note.product_id.bookName}
+                                                    {/* Dont Make Me Think */}
+                                                </Box>
+                                            </Box>
+                                            <Box className={classes.bookAuthorwish}><span>{note.product_id.author}</span></Box>
+                                            <Box className={classes.bookpricewish}>
+                                                <Box className={classes.discountwish}>Rs. {note.product_id.discountPrice}</Box>
+                                                <Box className={classes.pricewish}>Rs. {note.product_id.price}</Box>
+                                            </Box>
                                         </Box>
                                     </Box>
-                                </Box>
-                                <Box className={classes.deletewishlist}>
-                                    <DeleteIcon sx={{ color: '#9D9D9D' }} fontSize='small'/>
+                                    <Box className={classes.deletewishlist}>
+                                        <DeleteIcon sx={{ color: '#9D9D9D' }} fontSize='small' />
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
+                        ))
+                    }
                 </Box>
+
                 <Box className={classes.footer1}>
-                <Box className={classes.footertxt1}>Copyright @ 2020, Bookstore Private Limited.All Rights Reserved</Box>
-            </Box>
+                    <Box className={classes.footertxt1}>Copyright @ 2020, Bookstore Private Limited.All Rights Reserved</Box>
+                </Box>
             </Box>
 
         </div>

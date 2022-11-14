@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from '../header/Header'
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -11,6 +11,7 @@ import { makeStyles } from '@mui/styles';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useState } from 'react';
 import Counter from '../booksummary/Counter';
+import { getcartBookList, itemsCount } from '../../services/dataService';
 
 
 
@@ -153,10 +154,46 @@ const useStyle = makeStyles({
 
 })
 
-function MyCart() {
+function MyCart(props) {
     const classes = useStyle()
 
     const [count, setCount] = useState(1)
+    const [cartList, setCartList] = useState([])
+
+    const increment = () => {
+        setCount(count + 1);
+        let detailsObj = { id: props.id, quantityToBuy: count + 1 }
+        console.log(detailsObj, 'value of quantity')
+        itemsCount(detailsObj).then((response) => {
+            console.log(response, 'increment value')
+        }).catch((error) => console.log(error))
+    }
+
+    const decrement = () => {
+        if (count < 2) {
+            setCount(1)
+        } else {
+            setCount(count - 1)
+        }
+        let detailsObj = { id: props.id, quantityToBuy: count - 1 }
+        console.log(detailsObj, 'quantity')
+        itemsCount(detailsObj).then((response) => {
+            console.log(response, 'decrement_value')
+        }).catch((error) => console.log(error))
+    }
+
+    const getcartList = () => {
+        console.log('cart BookList')
+        getcartBookList().then((response) => {
+            console.log(response)
+            setCartList(response.data.result)
+        }).catch((error) => console.log(error))
+    }
+
+    useEffect(() => {
+        getcartList()
+    }, [])
+
     return (
         <div>
             <Box>
@@ -176,32 +213,51 @@ function MyCart() {
                                     }}>Use current location
                                 </Button>
                             </Box>
+
                             <Box sx={{ height: '2vh' }}></Box>
-                            <Box className={classes.textcart}>
-                                <Box className={classes.bookimagecart}>
-                                    <img width='100%' height='100%' src='assets/image11.png' />
-                                </Box>
-                                <Box className={classes.contentcart}>
-                                    <Box sx={{ height: '22%', fontSize: '17px', color: '#0A0102', fontWeight: '500' }}>
-                                        Don't Make Me Think
-                                        {/* {list.product_id.bookName} */}
+                            {
+                                cartList.map((note) =>(
+                                <Box className={classes.textcart}>
+                                    <Box className={classes.bookimagecart}>
+                                        <img width='100%' height='100%' src='assets/image11.png' />
                                     </Box>
-                                    <Box sx={{ height: '17%', fontSize: '13px', color: '#9D9D9D', fontWeight: '500' }}>
-                                        by Steve Krug
-                                    </Box>
-                                    <Box className={classes.pricecart}>
-                                        <Box className={classes.discountcart}>Rs. 1500 </Box>
-                                        <Box className={classes.costcart}>Rs. 2000</Box>
-                                    </Box>
-                                    <Box sx={{ height: '15%' }}></Box>
-                                    <Box className={classes.countercart}>
-                                        <Counter />
-                                        <Box sx={{ width: '30%' }}>
-                                            <Box style={{ fontSize: '14px', color: '#0A0102', fontWeight: '500', position: 'relative', right: '30px' }} >Remove</Box>
+                                    <Box className={classes.contentcart}>
+                                        <Box sx={{ height: '22%', fontSize: '17px', color: '#0A0102', fontWeight: '500' }}>
+                                            {/* Don't Make Me Think */}
+                                            {note.product_id.bookName}
+                                        </Box>
+                                        <Box sx={{ height: '17%', fontSize: '13px', color: '#9D9D9D', fontWeight: '500' }}>
+                                            {/* by Steve Krug */}
+                                            {note.product_id.author}
+                                        </Box>
+                                        <Box className={classes.pricecart}>
+                                            <Box className={classes.discountcart}>Rs. {note.product_id.discountPrice} </Box>
+                                            <Box className={classes.costcart}>Rs. {note.product_id.price}</Box>
+                                        </Box>
+                                        <Box sx={{ height: '15%' }}></Box>
+                                        <Box className={classes.countercart}>
+                                            {/* <Counter /> */}
+                                            <Box sx={{ display: 'flex', alignItems: 'center', width: '45%', justifyContent: 'space-between', border: '0px solid orange' }}>
+                                                <Box >
+                                                    <IconButton onClick={decrement} size='small' sx={{ border: '1px solid #DBDBDB' }}>
+                                                        <RemoveIcon fontSize='small' sx={{ color: '#DBDBDB' }} /></IconButton>
+                                                </Box>
+                                                <Box sx={{ width: '40%', height: '95%', border: '1px solid #DBDBDB' }} >
+                                                    <span style={{ fontSize: '22px' }} >{count}</span>
+                                                </Box>
+                                                <Box>
+                                                    <IconButton onClick={increment} size='small' sx={{ border: '1px solid #DBDBDB' }}>
+                                                        <AddIcon fontSize='small' sx={{ color: '#333232' }} /></IconButton>
+                                                </Box>
+                                            </Box>
+                                            <Box sx={{ width: '30%' }}>
+                                                <Box style={{ fontSize: '14px', color: '#0A0102', fontWeight: '500', position: 'relative', left: '10px' }} >Remove</Box>
+                                            </Box>
                                         </Box>
                                     </Box>
                                 </Box>
-                            </Box>
+                                ))
+                            }
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                                 <Button sx={{ backgroundColor: '#3371B5', width: '20%' }} variant="contained">Place Order</Button>
                             </Box>

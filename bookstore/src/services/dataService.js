@@ -20,6 +20,15 @@ export const addToWishList = (id) => {
 }
 
 export const itemsCount = (detailsObj) => {
-    let response = axios.put("https://bookstore.incubation.bridgelabz.com/bookstore_user/cart_item_quantity/${detailsObj.id}", detailsObj,headerConfig)
+    let response = axios.put(`https://bookstore.incubation.bridgelabz.com/bookstore_user/cart_item_quantity/${detailsObj.id}`, detailsObj,headerConfig)
       return response
+}
+
+export const getcartBookList = () => {
+    let response = axios.get('https://bookstore.incubation.bridgelabz.com/bookstore_user/get_cart_items', headerConfig)
+    return response
+}
+export const getWishList = () => {
+    let response = axios.get('https://bookstore.incubation.bridgelabz.com/bookstore_user/get_wishlist_items', headerConfig)
+    return response
 }
