@@ -32,3 +32,12 @@ export const getWishList = () => {
     let response = axios.get('https://bookstore.incubation.bridgelabz.com/bookstore_user/get_wishlist_items', headerConfig)
     return response
 }
+
+export const removeCartListItem = (cartlistObj) => {
+    let response = axios.delete(`https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_cart_item/${cartlistObj.id}`, headerConfig)
+    return response
+}
+export const removeWishListItem = (wishlistObj) => {
+    let response = axios.delete(`https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_wishlist_item/${wishlistObj.id}`, headerConfig)
+    return response
+}

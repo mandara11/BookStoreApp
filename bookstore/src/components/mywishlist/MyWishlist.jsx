@@ -4,7 +4,7 @@ import Header from '../header/Header'
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
-import { getWishList } from '../../services/dataService';
+import { getWishList, removeWishListItem } from '../../services/dataService';
 
 
 const useStyle = makeStyles({
@@ -147,6 +147,19 @@ function MyWishlist() {
             setWishList(response.data.result)
         }).catch((error) => { console.log(error) })
     }, [])
+
+    const removeitem=(id)=>{
+        let wishlistObj = {id : id}
+        removeWishListItem(wishlistObj)
+        .then((response) => {
+            console.log(response)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    console.log(wishlistObj, "deleted succesfully")
+    }
+
     return (
         <div>
             <Box>
@@ -184,7 +197,7 @@ function MyWishlist() {
                                         </Box>
                                     </Box>
                                     <Box className={classes.deletewishlist}>
-                                        <DeleteIcon sx={{ color: '#9D9D9D' }} fontSize='small' />
+                                        <DeleteIcon onClick={() => removeitem(note.product_id._id)} sx={{ color: '#9D9D9D' }} fontSize='small' />
                                     </Box>
                                 </Box>
                             </Box>
