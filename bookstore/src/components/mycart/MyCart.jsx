@@ -11,7 +11,9 @@ import { makeStyles } from '@mui/styles';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useState } from 'react';
 import Counter from '../booksummary/Counter';
-import { getcartBookList, itemsCount, removeCartListItem } from '../../services/dataService';
+import { addOrder, cartItemQuantity, getcartBookList, itemsCount, removeCartListItem } from '../../services/dataService';
+import CustomerDetails from '../customerdetails/CustomerDetails';
+import OrderSummary from '../ordersummary/OrderSummary';
 
 
 
@@ -138,12 +140,12 @@ const useStyle = makeStyles({
     textmycart: {
         width: '92%',
         textAlign: 'left',
-        fontSize: '15px',
+        fontSize: '20px',
         fontWeight: '500',
     },
     addressdetailscart1: {
         width: '100%',
-        height: '7vh',
+        height: 'auto',
         border: '0px solid #DBDBDB',
         display: 'flex',
         justifyContent: 'center',
@@ -151,6 +153,74 @@ const useStyle = makeStyles({
         position: 'relative',
         top: '20px',
     },
+    contentOD: {
+        width: '92%',
+        height: 'auto',
+        margin: '20px 0px 20px 0px',
+        border: '0px solid red',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        fontWeight: '500',
+        position:'relative',
+     },
+    addressorder: {
+        width: '100%',
+        height: '10vh',
+        border: '1px solid #DBDBDB',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+     },
+     bookorder: {
+        width: '38%',
+        height: '14vh',
+        marginBottom: '20px',
+        border: '0px solid orange',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        position:'relative',
+        top:'20px',
+     },
+     bookImgOD: {
+        width: '20%',
+        height: '90%',
+        marginTop: '5px',
+        border: '0px solid orange',
+     },
+     dataOD: {
+        width: '69%',
+        height: '100%',
+        border: '0px solid orange',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+     },
+     priceOD: {
+        width: '53%',
+        height: '25%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+     },
+     discountOD: {
+        color: '#0A0102',
+        fontWeight: '500',
+        fontSize: '16px',
+     },
+     costOD: {
+        color: '#878787',
+        textDecorationLine: 'line-through',
+        fontSize: '10px',
+     },
+     btnOD: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'flex-end',
+     }
 
 })
 
@@ -159,36 +229,72 @@ function MyCart(props) {
 
     const [count, setCount] = useState(1)
     const [cartList, setCartList] = useState([])
+    const [details, setDetails] = useState(false)
+    const [toggle4, setToggle4] = useState(false)
+    const [order, setOrder] = useState(false)
+    const [quantity, setQuantity] = useState([])
+    const [orderList, setOrderList] = useState([])
 
-    const increment = () => {
-        setCount(count + 1);
-        let detailsObj = { id: props.id, quantityToBuy: count + 1 }
-        console.log(detailsObj, 'value of quantity')
-        itemsCount(detailsObj).then((response) => {
-            console.log(response, 'increment value')
-        }).catch((error) => console.log(error))
+    const openCustomerDetails = () => {
+        setDetails(true)
+        setToggle4(true)
     }
 
-    const decrement = () => {
-        if (count < 2) {
-            setCount(1)
+    const openBookDetails = () => {
+        setOrder(true)
+    }
+    
+    const decrementValue = (id, quan) => {
+        if (count > 1) {
+            setCount(count => count - 1)
+            let inputObj = {
+                cartItem_id: id,
+                quantityToBuy: quan - 1
+            }
+            console.log(inputObj, 'value of quantity')
+            cartItemQuantity(inputObj).then((response) => {
+                console.log(response, 'decrement value');
+
+            }).catch((error) => console.log(error))
         } else {
-            setCount(count - 1)
+            setCount(1)
         }
-        let detailsObj = { id: props.id, quantityToBuy: count - 1 }
-        console.log(detailsObj, 'quantity')
-        itemsCount(detailsObj).then((response) => {
-            console.log(response, 'decrement_value')
+        console.log(quantity, 'quantity value of product dec....')
+    }
+
+    const incrementValue = (id, quan) => {
+        console.log(id, 'from mycart inc...')
+        setCount(count => count + 1)
+        let inputObj = {
+            cartItem_id: id,
+            quantityToBuy: quan + 1
+        }
+        console.log(inputObj, 'value of quantity')
+        cartItemQuantity(inputObj).then((response) => {
+            console.log(response, 'increment value');
+
         }).catch((error) => console.log(error))
     }
 
     const getcartList = () => {
-        console.log('cart BookList')
+        console.log('cart list books')
+
         getcartBookList().then((response) => {
             console.log(response)
             setCartList(response.data.result)
+            setQuantity(response.data.result)
+            setOrderList(response.data.result)
         }).catch((error) => console.log(error))
     }
+
+
+    // const getcartList = () => {
+    //     console.log('cart BookList')
+    //     getcartBookList().then((response) => {
+    //         console.log(response)
+    //         setCartList(response.data.result)
+    //     }).catch((error) => console.log(error))
+    // }
 
     useEffect(() => {
         getcartList()
@@ -205,6 +311,28 @@ function MyCart(props) {
             })
         console.log(cartlistObj, "deleted succesfully")
     }
+
+    const orderPlacedSuccess = () => {
+        console.log(cartList, 'list of ordered books')
+        let orderList = [];
+        
+        for (let i = 0; i < cartList.length; i++) {
+            let inObj = {
+               product_id: cartList[i].product_id._id,
+               product_name: cartList[i].product_id.bookName,
+               product_quantity: cartList[i].quantityToBuy,
+               product_price: cartList[i].product_id.discountPrice
+            }
+            orderList.push(inObj);
+         }
+         console.log(orderList, 'printing ordered data...')
+         let orderObj = {orders: orderList}
+         addOrder(orderObj).then((response) => {
+            console.log(response)
+         })
+            .catch((error) => { console.log(error) })
+      }
+   
 
     return (
         <div>
@@ -251,14 +379,14 @@ function MyCart(props) {
                                                 {/* <Counter /> */}
                                                 <Box sx={{ display: 'flex', alignItems: 'center', width: '45%', justifyContent: 'space-between', border: '0px solid orange' }}>
                                                     <Box >
-                                                        <IconButton onClick={decrement} size='small' sx={{ border: '1px solid #DBDBDB' }}>
+                                                        <IconButton onClick={() => decrementValue(note._id, note.quantityToBuy)} size='small' sx={{ border: '1px solid #DBDBDB' }}>
                                                             <RemoveIcon fontSize='small' sx={{ color: '#DBDBDB' }} /></IconButton>
                                                     </Box>
                                                     <Box sx={{ width: '40%', height: '95%', border: '1px solid #DBDBDB' }} >
                                                         <span style={{ fontSize: '22px' }} >{count}</span>
                                                     </Box>
                                                     <Box>
-                                                        <IconButton onClick={increment} size='small' sx={{ border: '1px solid #DBDBDB' }}>
+                                                        <IconButton onClick={() => incrementValue(note._id, note.quantityToBuy)} size='small' sx={{ border: '1px solid #DBDBDB' }}>
                                                             <AddIcon fontSize='small' sx={{ color: '#333232' }} /></IconButton>
                                                     </Box>
                                                 </Box>
@@ -273,16 +401,48 @@ function MyCart(props) {
                                 ))
                             }
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                                <Button sx={{ backgroundColor: '#3371B5', width: '20%' }} variant="contained">Place Order</Button>
+                                {
+                                    details ? null :
+                                        <Button sx={{ backgroundColor: '#3371B5', width: '20%' }} variant="contained" onClick={openCustomerDetails} >Place Order</Button>
+                                }
                             </Box>
                         </Box>
                     </Card>
-                    <Card className={classes.addressdetailscart} variant="outlined">
-                        <span className={classes.textmycart}>Address Details</span>
+                    {toggle4 ?
+                        <CustomerDetails openBookDetails={openBookDetails} /> :
+                        <Card className={classes.addressdetailscart} variant="outlined">
+                            <span className={classes.textmycart}>Address Details</span>
+                        </Card>
+                    }
+                    {
+                        order ? 
+                            <Card className={classes.addressdetailscart1} variant="outlined">
+                                <Box className={classes.contentOD}>
+                                    <Box><span className={classes.textmycart}>Order summery</span></Box>
+                                    {orderList.map((item) => (
+                                        <Box className={classes.bookorder}>
+                                            <Box className={classes.bookImgOD}>
+                                                <img width='100%' height='100%' src='assets/image11.png' />
+                                            </Box>
+                                            <Box className={classes.dataOD}>
+                                                <Box sx={{ height: '30%', fontSize: '17px', color: '#0A0102', fontWeight: '500' }}>{item.product_id.bookName}</Box>
+                                                <Box sx={{ height: '24%', fontSize: '13px', color: '#9D9D9D', fontWeight: '500' }}>{item.product_id.author}</Box>
+                                                <Box className={classes.priceOD}>
+                                                    <Box className={classes.discountOD}>Rs. {item.product_id.discountPrice}</Box><Box className={classes.costOD}>Rs. {item.product_id.price}</Box></Box>
+                                                <Box sx={{ height: '15%' }}></Box>
+                                            </Box>
+                                        </Box>))
+                                    }
+                                    <Box className={classes.btnOD}>
+                                        <Button variant='contained' sx={{ width: '23%' }} onClick={orderPlacedSuccess}>Checkout</Button>
+                                    </Box>
+                                </Box>
+                            </Card>
+                            :
+                    <Card className={classes.addressorder} variant="outlined">
+                        <span className={classes.textMC}>Order summery</span>
                     </Card>
-                    <Card className={classes.addressdetailscart1} variant="outlined">
-                        <span className={classes.textmycart}>Order summery</span>
-                    </Card>
+                    }
 
                 </Box>
             </Box>
