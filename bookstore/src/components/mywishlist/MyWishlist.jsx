@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import { getWishList, removeWishListItem } from '../../services/dataService';
+import { useNavigate } from 'react-router-dom';
 
 
 const useStyle = makeStyles({
@@ -139,6 +140,8 @@ const useStyle = makeStyles({
 
 function MyWishlist() {
     const classes = useStyle()
+    const navigate = useNavigate()
+    
     const [wishList, setWishList] = useState([])
 
     useEffect(() => {
@@ -160,12 +163,16 @@ function MyWishlist() {
     console.log(wishlistObj, "deleted succesfully")
     }
 
+    const openDashBoard = () => {
+        navigate('/dashboard')
+     }
+
     return (
         <div>
             <Box>
                 <Header />
                 <Box className={classes.headerwishlist}>
-                    <Box className={classes.homewishlist} >Home /</Box>
+                    <Box className={classes.homewishlist}  onClick={openDashBoard}>Home /</Box>
                     <Box className={classes.wishlistheader}>  My Wishlist</Box>
                 </Box>
                 <Box className={classes.containerwish}>

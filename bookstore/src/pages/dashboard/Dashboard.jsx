@@ -53,7 +53,7 @@ const useStyles = makeStyles({
     },
     header2btn: {
         position: 'relative',
-        left: '16px',
+        left: '108px',
     },
     footer: {
         height: '8vh',
@@ -102,6 +102,8 @@ function Dashboard(props) {
         })
     }, [])
 
+    
+
     return (
         <div>
             <Box>
@@ -118,7 +120,7 @@ function Dashboard(props) {
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-                    {toggle1 ? <BookSummary openBookBack={openBookBack} id={input._id} bookName={input.bookName} author={input.author} quantity={input.quantity} discountPrice={input.discountPrice} price={input.price} />
+                    {toggle1 ? <BookSummary openBookBack={openBookBack} id={input._id} bookName={input.bookName} author={input.author} quantity={input.quantity} discountPrice={input.discountPrice} price={input.price} description={input.description} />
                      : bookList.map((book) => (<Box onClick={()=>openBookSummary(book)} ><Book key={book._id} book={book} /> </Box>))
                     }
                 </Box>

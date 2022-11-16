@@ -13,6 +13,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { useNavigate } from 'react-router-dom';
+import MyCart from '../mycart/MyCart';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -46,12 +49,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '38vw',
+      width: '35vw',
     },
   },
 }));
 
 export default function Header() {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -116,7 +120,7 @@ export default function Header() {
     >
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-            <PersonOutlineOutlinedIcon />
+          <PersonOutlineOutlinedIcon />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -126,25 +130,33 @@ export default function Header() {
           aria-label="show 17 new notifications"
           color="inherit"
         >
-            <ShoppingCartOutlinedIcon />
+          <ShoppingCartOutlinedIcon />
         </IconButton>
         <p>Cart</p>
       </MenuItem>
     </Menu>
   );
 
+  const openmyCart = () => {
+    navigate('/mycart')
+  }
+
+  const openwishList = () => {
+    navigate('/mywishlist')
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: '#A03037' }}>
         <Toolbar>
-        <Box sx={{ width: '8%' }} />
+          <Box sx={{ width: '8%' }} />
           <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="open drawer"
           >
-            <img src='https://public-v2links.adobecc.com/d096df37-ca37-4026-553f-8cfa6bec09ec/component?params=component_id%3A2f2fecb9-b66b-41fa-9c8c-696295f4b1ad&params=version%3A0&token=1667793889_da39a3ee_a2182f41187e451f6fd1ed26de716cb8ef9e28f7&api_key=CometServer1' />
+            <img src='assets/education.png' />
           </IconButton>
           <Typography
             variant="h6"
@@ -164,16 +176,22 @@ export default function Header() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          <Box sx={{ width: '15%'}} />
+          <Box sx={{ width: '8%' }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="medium" color="inherit" sx={{ flexDirection: 'column', width: '100%', borderLeft: '1px solid #89292f', borderRadius: '0%' }}>
+            <IconButton size="medium" color="inherit" sx={{ flexDirection: 'column', width: '6.5vw', borderLeft: '1px solid #89292f', borderRadius: '0%' }}>
               <div><PersonOutlineOutlinedIcon /></div>
-              <Box sx={{ fontSize: '10px' }}>Profile</Box>
+              <Box sx={{ fontSize: '12px' }}>Profile</Box>
             </IconButton>
-            <IconButton
+            <IconButton onClick={openwishList} size="medium" color="inherit" sx={{
+              flexDirection: 'column', width: '6.5vw',
+              borderLeft: '1px solid #89292f', borderRadius: '0%'
+            }} >
+              <div><FavoriteIcon fontSize='medium' /></div><Box sx={{ fontSize: '10px' }}>WishList</Box>
+            </IconButton>
+            <IconButton onClick={openmyCart}
               size="medium "
               aria-label="show 17 new notifications"
-              color="inherit" sx={{ flexDirection: 'column', width: '100%', borderLeft: '1px solid #89292f', borderRight: '1px solid #89292f', borderRadius: '0%' }}
+              color="inherit" sx={{ flexDirection: 'column', width: '6.5vw', borderLeft: '1px solid #89292f', borderRight: '1px solid #89292f', borderRadius: '0%' }}
             >
               <div><ShoppingCartOutlinedIcon /></div>
               <Box sx={{ fontSize: '10px' }}>Cart</Box>
