@@ -14,6 +14,7 @@ import Counter from '../booksummary/Counter';
 import { addOrder, cartItemQuantity, getcartBookList, itemsCount, removeCartListItem } from '../../services/dataService';
 import CustomerDetails from '../customerdetails/CustomerDetails';
 import OrderSummary from '../ordersummary/OrderSummary';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -227,6 +228,12 @@ const useStyle = makeStyles({
 function MyCart(props) {
     const classes = useStyle()
 
+    const navigate = useNavigate()
+
+    const openDashBoard = () => {
+        navigate('/dashboard')
+     }
+
     const [count, setCount] = useState(1)
     const [cartList, setCartList] = useState([])
     const [details, setDetails] = useState(false)
@@ -331,6 +338,7 @@ function MyCart(props) {
             console.log(response)
          })
             .catch((error) => { console.log(error) })
+            navigate('/ordersuccess')
       }
    
 
@@ -339,7 +347,7 @@ function MyCart(props) {
             <Box>
                 <Header />
                 <Box className={classes.headercart}>
-                    <Box className={classes.homeheader} >Home /</Box>
+                    <Box className={classes.homeheader}  onClick={openDashBoard}>Home /</Box>
                     <Box className={classes.cartheader}> My cart</Box>
                 </Box>
                 <Box className={classes.containercart}>

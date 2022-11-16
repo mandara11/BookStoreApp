@@ -8,6 +8,7 @@ import { makeStyles } from '@mui/styles'
 import { useState } from 'react';
 import { login } from '../../services/userService';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import { useNavigate } from 'react-router-dom';
 
 const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&-+=()])([a-zA-Z0-9]*).{8,}$/;
@@ -139,6 +140,8 @@ const useStyles = makeStyles({
 
 function Login(props) {
 
+  const navigate = useNavigate()
+
   const classes = useStyles()
 
   const [loginObj, setLoginObj] = useState({ email: '', password: '' })
@@ -203,6 +206,7 @@ function Login(props) {
       login(loginObj).then((response)=>{
         console.log(response)
         localStorage.setItem("token",response.data.result.accessToken)
+        navigate('/dashboard')
       }).catch((error)=>{
         console.log(error)
       })

@@ -2,6 +2,7 @@ import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { Box, Button, Card, Paper } from '@mui/material'
 import Header from '../header/Header'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -101,6 +102,11 @@ const useStyle = makeStyles({
 
 function OrderSuccess() {
     const classes = useStyle()
+    const navigate = useNavigate()
+
+    const openDashBoard = () => {
+        navigate('/dashboard')
+    }
     return (
         <div>
             <Box>
@@ -130,7 +136,7 @@ function OrderSuccess() {
                         </Paper>
                         <Box className={classes.orderbutton}>
                         <Button variant='contained' sx={{backgroundColor: '#3371B5', width: '24%'}}
-                        //  onClick={openDashBoard}
+                         onClick={openDashBoard}
                          >Continue Shopping</Button>
                     </Box>
                     </Box>
