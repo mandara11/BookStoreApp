@@ -96,6 +96,42 @@ const useStyles = makeStyles({
         position: 'relative',
         top: '5px',
         backgroundColor: '#A03037 !important',
+    },
+    ['@media only screen and (min-width: 320px) and (max-width: 480px)']: {
+        mains: {
+            width: '75vw',
+            height: '65vh',
+            top: '150px',
+            left: '50px',
+        },
+        loginbuttons: {
+            fontSize:"18px !important",
+        },
+        signupbuttons: {
+            fontSize:"18px !important",
+        }
+    },
+    ['@media only screen and (min-width: 481px) and (max-width: 720px)']: {
+        mains: {
+            width: '55vw',
+            height: '65vh',
+            top: '150px',
+            left: '130px',
+        },
+        loginbuttons: {
+            fontSize:"20px !important",
+        },
+        signupbuttons: {
+            fontSize:"20px !important",
+        }
+    },
+    ['@media only screen and (min-width: 721px) and (max-width: 1024px)']: {
+        mains: {
+            width: '40vw',
+            height: '65vh', 
+            top: '150px',
+            left: '350px',
+        },
     }
 
 })
@@ -113,24 +149,28 @@ function SignUp(props) {
 
     const takeFullname = (event) => {
         setSignUpObj(prevState => ({
+            ...prevState,
             fullName: event.target.value
         }))
         console.log(event.target.value)
     }
     const takeUsername = (event) => {
         setSignUpObj(prevState => ({
+            ...prevState,
             email: event.target.value
         }))
         console.log(event.target.value)
     }
     const takePassword = (event) => {
         setSignUpObj(prevState => ({
+            ...prevState,
             password: event.target.value
         }))
         console.log(event.target.value)
     }
     const takeMobilenumber = (event) => {
         setSignUpObj(prevState => ({
+            ...prevState,
             phone: event.target.value
         }))
         console.log(event.target.value)

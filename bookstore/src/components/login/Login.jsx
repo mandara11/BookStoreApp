@@ -134,6 +134,67 @@ const useStyles = makeStyles({
     color: 'black !important',
     fontWeight: '500 !important',
     textTransform: 'capitalize !important',
+  },
+  ['@media only screen and (min-width: 320px) and (max-width: 480px)']: {
+    main: {
+      width: '75vw',
+      height: '65vh',
+      top: '150px',
+      left: '50px',
+    },
+    loginbutton: {
+      fontSize: "18px !important",
+    },
+    signupbutton: {
+      fontSize: "18px !important",
+    },
+    texttitle1: {
+      fontSize: '7px !important',
+      position:'relative',
+      left:'0px',
+      bottom:'5px',
+    },
+    texttitle:{
+      fontSize:'8px',
+    }
+   
+  },
+  ['@media only screen and (min-width: 481px) and (max-width: 720px)']: {
+    main: {
+      width: '55vw',
+      height: '65vh',
+      top: '150px',
+      left: '130px',
+    },
+    loginbutton: {
+      fontSize: "18px !important",
+    },
+    signupbutton: {
+      fontSize: "18px !important",
+    },
+    texttitle1: {
+      fontSize: '7px !important',
+      position:'relative',
+      left:'0px',
+      bottom:'5px',
+    },
+    texttitle:{
+      fontSize:'8px',
+    }
+  },
+  ['@media only screen and (min-width: 721px) and (max-width: 1024px)']: {
+    main: {
+      width: '40vw',
+      height: '65vh',
+      top: '150px',
+      left: '350px',
+    },
+    texttitle1: {
+      fontSize: '10px !important',
+      position:'relative',
+      left:'0px',
+      bottom:'5px',
+    },
   }
 
 })
@@ -172,42 +233,42 @@ function Login(props) {
     let emailTest = emailRegex.test(loginObj.email)
     let passwordTest = passwordRegex.test(loginObj.password)
 
-    if (emailTest===false){
-      setRegexObj(prevState=> ({
+    if (emailTest === false) {
+      setRegexObj(prevState => ({
         ...prevState,
-        emailBorder:true,
-        emailHelper:'Enter valid e-mail or phone number'
+        emailBorder: true,
+        emailHelper: 'Enter valid e-mail or phone number'
       }))
     }
-    else if(emailTest===true){
-      setRegexObj(prevState=> ({
+    else if (emailTest === true) {
+      setRegexObj(prevState => ({
         ...prevState,
-        emailBorder:false,
-        emailHelper:""
+        emailBorder: false,
+        emailHelper: ""
       }))
     }
 
-    if (passwordTest===false){
-      setRegexObj(prevState=> ({
+    if (passwordTest === false) {
+      setRegexObj(prevState => ({
         ...prevState,
-        passwordBorder:true,
-        passwordHelper:'Enter valid password'
+        passwordBorder: true,
+        passwordHelper: 'Enter valid password'
       }))
     }
-    else if(passwordTest===true){
-      setRegexObj(prevState=> ({
+    else if (passwordTest === true) {
+      setRegexObj(prevState => ({
         ...prevState,
-        passwordBorder:false,
-        passwordHelper:""
+        passwordBorder: false,
+        passwordHelper: ""
       }))
     }
     console.log(loginObj)
-    if(emailTest===true && passwordTest===true){
-      login(loginObj).then((response)=>{
+    if (emailTest === true && passwordTest === true) {
+      login(loginObj).then((response) => {
         console.log(response)
-        localStorage.setItem("token",response.data.result.accessToken)
+        localStorage.setItem("token", response.data.result.accessToken)
         navigate('/dashboard')
-      }).catch((error)=>{
+      }).catch((error) => {
         console.log(error)
       })
       console.log("login Success")

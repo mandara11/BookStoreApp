@@ -60,8 +60,50 @@ const useStyles = makeStyles({
         height:'30px',
         width:'30px',
         position:'relative',
-        bottom:'185px',
-        left:'70px',
+        bottom:'200px',
+        left:'75px',
+    },
+    ['@media only screen and (min-width: 320px) and (max-width: 480px)']: {
+        main2: {
+           display: 'none',
+        },        
+    },
+    ['@media only screen and (min-width: 481px) and (max-width: 768px)']: {
+        main2: {
+            display: 'none',
+         },
+    },
+    ['@media only screen and (min-width: 721px) and (max-width: 1024px)']: {
+        main2: {
+            width: '50%',
+            height: '58%',            
+            top: '170px',
+            left: '100px',
+
+        },
+        imgtext: {
+            border: '0px solid blue',
+            width: '60%',
+            height: '76%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        },
+        image: {
+            width: '12rem',
+            height: '12rem',
+        },
+        image2: {
+            width: '18px',
+            bottom: '150px',
+            left: '47px',        
+        },
+        maintext: {
+            position:'relative',
+            top :'10px',
+            fontSize:'15px',
+        }
     }
 
 })
@@ -70,12 +112,12 @@ function Lander() {
 
     const [toggle, setToggle] = useState(false)
 
-    const listenTologin1 = () => {
-        setToggle(true)
-    }
-    const listenTosignup1 = () => {
-        setToggle(false)
-    }
+        const listenTologin1 = () => {
+            setToggle(true)
+        }
+        const listenTosignup1 = () => {
+            setToggle(false)
+        }
     const classes = useStyles()
     return (
         <div>
@@ -83,8 +125,8 @@ function Lander() {
                 <Box className={classes.main2}>
                     <Box className={classes.imgtext}>
                         <Box className={classes.image}>
-                            <img className={classes.image1} src='https://public-v2links.adobecc.com/d096df37-ca37-4026-553f-8cfa6bec09ec/component?params=component_id%3A85534115-ba16-412e-b646-6dd43d839dd8&params=version%3A0&token=1667793889_da39a3ee_a2182f41187e451f6fd1ed26de716cb8ef9e28f7&api_key=CometServer1' />
-                            <img className={classes.image2} src='https://public-v2links.adobecc.com/d096df37-ca37-4026-553f-8cfa6bec09ec/component?params=component_id%3A2f2fecb9-b66b-41fa-9c8c-696295f4b1ad&params=version%3A0&token=1667793889_da39a3ee_a2182f41187e451f6fd1ed26de716cb8ef9e28f7&api_key=CometServer1' />
+                            <img className={classes.image1} src='assets/logo1.png' />
+                            <img className={classes.image2} src='assets/education.png' />
                         </Box>
                         <Box className={classes.maintext}>ONLINE BOOK SHOPPING</Box>
                     </Box>
